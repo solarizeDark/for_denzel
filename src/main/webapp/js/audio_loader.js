@@ -6,37 +6,42 @@ window.addEventListener('load', function (){
     document.getElementById("audios")
             .addEventListener('click', function (event) {
 
+                let button = event.target;
+
                 // delete
-                if (event.target.className === 'delete') {
-                    favorites_handle(event.target, 'delete');
+                if (button.className === 'delete') {
+                    button.innerHTML = 'Add to favorites';
+                    button.className = 'add';
+                    favorites_handle(button, 'delete');
                 }
 
                 // add to favorites buttons
-                else if (event.target.className === 'add') {
+                else if (button.className === 'add') {
+                    button.innerHTML = 'Delete from favorites';
+                    button.className = 'delete';
                     favorites_handle(event.target);
                 }
 
                 // to prevent any other audio start playing
                 else if (current == null || current === event.target) {
 
-                    if (event.target.className === 'play') {
-                        event.target.disabled = true;
-                        play_audio(event.target);
+                    if (button.className === 'play') {
+                        button.disabled = true;
+                        play_audio(button);
 
                         // stop button
-                        current = event.target.nextElementSibling;
+                        current = button.nextElementSibling;
                     } else {
                         source.stop(0);
                         // stop pushed
                         current = null;
-                        event.target.parentElement.children[1].disabled = false;
+                        button.parentElement.children[1].disabled = false;
                     }
                 }
     })
 });
 
 function favorites_handle(target, action = 'add') {
-    target.innerHTML = 'Delete from favorites';
     let title = target.parentElement.firstElementChild.innerHTML;
 
     let parameters = { title : title.trim() };
